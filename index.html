@@ -1,27 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title></title>
-</head>
-<body>
-  <h1>Matrix Offloader</h1>
-  <p>upload your sparse matrix</p>
-  <button id="solveButton">select file</button>
+  <head>
+    <meta charset="UTF-8">
+    <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <title></title>
+  </head>
+  <body>
+    <h1>Matrix Offloader</h1>
+    <p>upload your sparse matrix</p>
+    <button id="solveButton">select file</button>
 
-  <p>Start computation</p>
+    <p>Start computation</p>
 
-  <h2>Answer</h2>
-
-
-  <script>
-    var sBtn = document.getElementById("solveButton");
-    sBtn.addEventListener("click",function(){
-      filesc
-    });
-  
-  </script>
+    <input type="file" id="files" name="files[]" multiple />
+    <output id="list"></output>
 
 
-</body>
+    <h2>Answer</h2>
+
+    <script>
+      if (window.File && window.FileReader && window.FileList && window.Blob) {
+        document.getElementById('files').addEventListener('change', handleFileSelect, false);
+        } else {
+        alert('The File APIs are not fully supported in this browser.');
+      }
+
+      function handleFileSelect(evt) {
+        var files = evt.target.files; // FileList object
+
+        // files is a FileList of File objects. List some properties.
+        var output = [];
+        for (var i = 0, f; f = files[i]; i++) {
+          output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+          f.size, ' bytes, last modified: ',
+          f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
+          '</li>');
+        }
+        document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+      }
+
+      var orgMat = ;
+      var cmpMat = ;
+
+      var sBtn = document.getElementById("solveButton");
+      sBtn.addEventListener("click",function(){
+        $.ajax({
+          url: "http://locahost:3000/cholmod",
+          data: {
+            cmpMat: cmpMat 
+          },
+          success: function( data ) {
+            $( "#weather-temp" ).html( "<strong>" + data + "</strong> degrees" );
+          }
+        });
+      });
+
+    </script>
+
+
+  </body>
 </html>
